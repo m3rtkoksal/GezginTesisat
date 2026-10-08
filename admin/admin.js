@@ -83,14 +83,14 @@ if (OPEN_ADMIN) { $("logout").hidden = true; onUser(true); }
 else onAuthStateChanged(auth, onUser);
 
 // Fotoğrafı en uzun kenarı 1600px olacak şekilde küçültüp JPEG'e çevirir.
-async function shrink(file) {
+async function shrink(file, max = 1600, q = 0.85) {
   const bmp = await createImageBitmap(file);
-  const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
   const c = document.createElement("canvas");
   c.width = Math.round(bmp.width * k);
   c.height = Math.round(bmp.height * k);
   c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-  return new Promise((res, rej) => c.toBlob((b) => (b ? res(b) : rej(new Error("Görsel işlenemedi"))), "image/jpeg", 0.85));
+  return new Promise((res, rej) => c.toBlob((b) => (b ? res(b) : rej(new Error("Görsel işlenemedi"))), "image/jpeg", q));
 }
 
 $("upload").onchange = async (e) => {
@@ -100,11 +100,15 @@ $("upload").onchange = async (e) => {
   for (const [i, f] of files.entries()) {
     $("saveMsg").textContent = `Yükleniyor ${i + 1}/${files.length}...`;
     try {
-      const blob = await shrink(f);
-      const path = `gallery/${Date.now()}-${i}.jpg`;
-      const r = ref(storage, path);
-      await uploadBytes(r, blob, { contentType: "image/jpeg" });
-      gallery.push({ url: await getDownloadURL(r), path, cat: $("uploadCat").value });
+      const id = `${Date.now()}-${i}`;
+      const meta = { contentType: "image/jpeg", cacheControl: "public, max-age=31536000, immutable" };
+      const put = async (path, blob) => { const r = ref(storage, path); await uploadBytes(r, blob, meta); return getDownloadURL(r); };
+      const path = `gallery/f${id}.jpg`;
+      const [url, thumb] = await Promise.all([
+        shrink(f, 1600, 0.82).then((b) => put(path, b)),
+        shrink(f, 640, 0.72).then((b) => put(`gallery/t${id}.jpg`, b))
+      ]);
+      gallery.push({ url, thumb, path, cat: $("uploadCat").value });
       activeCat = $("uploadCat").value;
       ok++;
     } catch (err) {
