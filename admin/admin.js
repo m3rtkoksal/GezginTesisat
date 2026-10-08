@@ -1,5 +1,6 @@
 import { app } from "../content.js";
 import { loadContent, saveContent } from "../content.js";
+import { CATEGORIES } from "../categories.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
@@ -15,13 +16,20 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 let gallery = [];
 
+for (const k of CATEGORIES) $("uploadCat").add(new Option(k, k));
+
 const renderGallery = () => {
   $("gallery").replaceChildren(...gallery.map((g, i) => {
     const d = document.createElement("div");
     const img = document.createElement("img"); img.src = g.url;
     const b = document.createElement("button"); b.type = "button"; b.textContent = "✕";
     b.onclick = () => { gallery.splice(i, 1); renderGallery(); };
-    d.append(img, b);
+    const sel = document.createElement("select");
+    for (const k of CATEGORIES) sel.add(new Option(k, k));
+    sel.value = CATEGORIES.includes(g.cat) ? g.cat : CATEGORIES[0];
+    g.cat = sel.value;
+    sel.onchange = () => { g.cat = sel.value; };
+    d.append(img, b, sel);
     return d;
   }));
 };
@@ -72,7 +80,7 @@ $("upload").onchange = async (e) => {
       const path = `gallery/${Date.now()}-${i}.jpg`;
       const r = ref(storage, path);
       await uploadBytes(r, blob, { contentType: "image/jpeg" });
-      gallery.push({ url: await getDownloadURL(r), path });
+      gallery.push({ url: await getDownloadURL(r), path, cat: $("uploadCat").value });
       ok++;
     } catch (err) {
       console.error(err);

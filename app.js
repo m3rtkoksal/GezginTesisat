@@ -1,4 +1,5 @@
 import { loadContent } from "./content.js";
+import { CATEGORIES } from "./categories.js";
 
 const $ = (id) => document.getElementById(id);
 const digits = (s) => s.replace(/[^\d+]/g, "");
@@ -41,16 +42,32 @@ document.querySelectorAll('a[href="#gallery"]').forEach((a) => (a.hidden = !c.ga
 const box = $("lightbox");
 box.querySelector("button").onclick = () => box.close();
 box.onclick = (e) => { if (e.target === box) box.close(); };
-$("galleryList").replaceChildren(...c.gallery.map((g) => {
-  const i = document.createElement("img");
-  i.src = g.url; i.loading = "lazy"; i.alt = c.businessName + " çalışma fotoğrafı";
-  i.onclick = () => { box.querySelector("img").src = g.url; box.showModal(); };
-  return i;
+const catOf = (g) => (CATEGORIES.includes(g.cat) ? g.cat : CATEGORIES[0]);
+const cats = CATEGORIES.filter((k) => c.gallery.some((g) => catOf(g) === k));
+const showCat = (k) => {
+  $("galleryTabs").querySelectorAll("button").forEach((b) => {
+    const on = b.dataset.cat === k;
+    b.classList.toggle("on", on); b.setAttribute("aria-selected", on);
+  });
+  $("galleryList").replaceChildren(...c.gallery.filter((g) => catOf(g) === k).map((g) => {
+    const i = document.createElement("img");
+    i.src = g.url; i.loading = "lazy"; i.alt = `${c.businessName} - ${k}`;
+    i.onclick = () => { box.querySelector("img").src = g.url; box.showModal(); };
+    i.className = "rv in";
+    return i;
+  }));
+};
+$("galleryTabs").replaceChildren(...cats.map((k) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.role = "tab"; b.dataset.cat = k; b.textContent = k;
+  b.onclick = () => showCat(k);
+  return b;
 }));
+if (cats.length) showCat(cats[0]);
 
 const nav = $("nav");
 const onScroll = () => nav.classList.toggle("solid", scrollY > 24);
 addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
 const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: .12 });
-document.querySelectorAll(".card,.steps li,.photos img,.contact,.checks li").forEach((el) => { el.classList.add("rv"); io.observe(el); });
+document.querySelectorAll(".card,.steps li,.contact,.checks li").forEach((el) => { el.classList.add("rv"); io.observe(el); });

@@ -17,3 +17,6 @@ button.ghost { background:#e3ecf3; color:#0a2a43; padding:6px 12px; }
 button.ai { margin:4px 0 8px; padding:6px 12px; background:#eef5fb; color:#0b6fb8; border:1px solid #c9d6e0; }
 .ai-box { margin:14px 0; background:#f5f9fc; }
 .ai-box p { white-space:pre-wrap; }
+
+.gallery select{width:100%;margin-top:4px;padding:6px;font-size:13px}
+select{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;border:1px solid #c9d6e0;border-radius:8px;background:#fff}
