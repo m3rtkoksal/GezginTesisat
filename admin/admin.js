@@ -18,20 +18,44 @@ let gallery = [];
 
 for (const k of CATEGORIES) $("uploadCat").add(new Option(k, k));
 
+let activeCat = CATEGORIES[0];
+const catOf = (g) => (CATEGORIES.includes(g.cat) ? g.cat : CATEGORIES[0]);
+
 const renderGallery = () => {
-  $("gallery").replaceChildren(...gallery.map((g, i) => {
+  for (const g of gallery) g.cat = catOf(g);
+  // Sekmeler: her kategori ve içindeki fotoğraf sayısı
+  $("galleryTabs").replaceChildren(...CATEGORIES.map((k) => {
+    const n = gallery.filter((g) => g.cat === k).length;
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = `${k} (${n})`;
+    b.className = "tab" + (k === activeCat ? " on" : "");
+    b.onclick = () => { activeCat = k; $("uploadCat").value = k; renderGallery(); };
+    return b;
+  }));
+  $("uploadCat").value = activeCat;
+  const list = gallery.filter((g) => g.cat === activeCat);
+  $("gallery").replaceChildren(...list.map((g) => {
     const d = document.createElement("div");
     const img = document.createElement("img"); img.src = g.url;
-    const b = document.createElement("button"); b.type = "button"; b.textContent = "✕";
-    b.onclick = () => { gallery.splice(i, 1); renderGallery(); };
+    const b = document.createElement("button"); b.type = "button"; b.textContent = "✕"; b.title = "Sil";
+    b.onclick = () => { gallery.splice(gallery.indexOf(g), 1); renderGallery(); };
     const sel = document.createElement("select");
     for (const k of CATEGORIES) sel.add(new Option(k, k));
-    sel.value = CATEGORIES.includes(g.cat) ? g.cat : CATEGORIES[0];
-    g.cat = sel.value;
-    sel.onchange = () => { g.cat = sel.value; };
-    d.append(img, b, sel);
+    sel.value = g.cat;
+    sel.title = "Kategoriyi değiştir";
+    sel.onchange = () => { g.cat = sel.value; renderGallery(); };
+    const cap = document.createElement("input");
+    cap.type = "text"; cap.maxLength = 120; cap.placeholder = "Açıklama (isteğe bağlı)";
+    cap.value = g.caption || "";
+    cap.oninput = () => { g.caption = cap.value; };
+    d.append(img, b, sel, cap);
     return d;
   }));
+  if (!list.length) {
+    const p = document.createElement("p");
+    p.className = "hint"; p.textContent = "Bu kategoride fotoğraf yok. Aşağıdan ekleyebilirsin.";
+    $("gallery").append(p);
+  }
 };
 
 loginForm.onsubmit = async (e) => {
@@ -81,6 +105,7 @@ $("upload").onchange = async (e) => {
       const r = ref(storage, path);
       await uploadBytes(r, blob, { contentType: "image/jpeg" });
       gallery.push({ url: await getDownloadURL(r), path, cat: $("uploadCat").value });
+      activeCat = $("uploadCat").value;
       ok++;
     } catch (err) {
       console.error(err);

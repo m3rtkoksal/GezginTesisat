@@ -50,11 +50,13 @@ const showCat = (k) => {
     b.classList.toggle("on", on); b.setAttribute("aria-selected", on);
   });
   $("galleryList").replaceChildren(...c.gallery.filter((g) => catOf(g) === k).map((g) => {
+    const f = document.createElement("figure");
     const i = document.createElement("img");
-    i.src = g.url; i.loading = "lazy"; i.alt = `${c.businessName} - ${k}`;
-    i.onclick = () => { box.querySelector("img").src = g.url; box.showModal(); };
-    i.className = "rv in";
-    return i;
+    i.src = g.url; i.loading = "lazy"; i.alt = g.caption || `${c.businessName} - ${k}`;
+    i.onclick = () => { box.querySelector("img").src = g.url; $("lbCap").textContent = g.caption || ""; box.showModal(); };
+    f.append(i);
+    if (g.caption) { const t = document.createElement("figcaption"); t.textContent = g.caption; f.append(t); }
+    return f;
   }));
 };
 $("galleryTabs").replaceChildren(...cats.map((k) => {

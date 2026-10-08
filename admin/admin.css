@@ -20,3 +20,10 @@ button.ai { margin:4px 0 8px; padding:6px 12px; background:#eef5fb; color:#0b6fb
 
 .gallery select{width:100%;margin-top:4px;padding:6px;font-size:13px}
 select{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;border:1px solid #c9d6e0;border-radius:8px;background:#fff}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .tab{flex:none;background:#e3ecf3;color:#0a2540;padding:8px 14px;font-size:14px;border-radius:999px}
+.tabs .tab.on{background:#0a2540;color:#fff}
+
+.gallery input{margin-top:4px;padding:6px 8px;font-size:13px}
