@@ -1,0 +1,19 @@
+* { box-sizing:border-box; }
+body { margin:0; background:#f5f9fc; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:#1b2a38; }
+main { max-width:640px; margin:0 auto; padding:16px; }
+.box { background:#fff; border:1px solid #e3ecf3; border-radius:12px; padding:18px; }
+h1 { font-size:22px; } h2 { font-size:17px; margin:22px 0 10px; }
+label { display:block; margin:10px 0; font-size:14px; font-weight:600; }
+input, textarea { display:block; width:100%; margin-top:4px; padding:10px; font:inherit; border:1px solid #c9d6e0; border-radius:8px; }
+button { padding:12px 20px; border:0; border-radius:8px; background:#0b6fb8; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+button.ghost { background:#e3ecf3; color:#0a2a43; padding:6px 12px; }
+.bar { display:flex; justify-content:space-between; align-items:center; }
+.hint { font-size:13px; color:#6b7c8a; margin:0 0 6px; }
+.msg { font-size:14px; min-height:1.2em; }
+.gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; margin-bottom:10px; }
+.gallery div { position:relative; }
+.gallery img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:8px; }
+.gallery button { position:absolute; top:4px; right:4px; padding:2px 8px; background:#c0392b; }
+button.ai { margin:4px 0 8px; padding:6px 12px; background:#eef5fb; color:#0b6fb8; border:1px solid #c9d6e0; }
+.ai-box { margin:14px 0; background:#f5f9fc; }
+.ai-box p { white-space:pre-wrap; }

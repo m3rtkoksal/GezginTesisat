@@ -1,0 +1,51 @@
+{
+  "hosting": {
+    "site": "su-tesisat-site-mk",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "*.rules",
+      "firestore.indexes.json",
+      "**/.*",
+      "functions/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/rewrite",
+        "function": {
+          "functionId": "rewrite",
+          "region": "europe-west1"
+        }
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|html|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ]
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "eur3",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true
+    }
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs22"
+  }
+}

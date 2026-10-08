@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GEÇİCİ: giriş yok. Girişi geri açmak için write kuralını e-posta kontrolüne çevir.
+    match /site/content {
+      allow read, write: if true;
+    }
+  }
+}
