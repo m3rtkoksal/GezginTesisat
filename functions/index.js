@@ -5,6 +5,11 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const ANTHROPIC_API_KEY = defineSecret("ANTHROPIC_API_KEY");
 
+// Teklif formu -> Ustaya API (functions/quote.js). admin.initializeApp() sonrası yüklenmeli.
+exports.quote = require("./quote").quote;
+const { requireAdmin, adminSetup } = require("./admin");
+exports.adminSetup = adminSetup;
+
 const DAILY_LIMIT = 10; // tüm site için günlük toplam istek sayısı
 const MAX_CHARS = 2000;
 const MODEL = "claude-haiku-5-5";
@@ -19,6 +24,9 @@ exports.rewrite = onRequest(
   { region: "europe-west1", secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 60, maxInstances: 2 },
   async (req, res) => {
     if (req.method !== "POST") return res.status(405).json({ error: "POST gerekli" });
+
+    // Sadece giriş yapmış yönetici (umitkurt360@gmail.com, e-postası doğrulanmış) AI editörünü kullanabilir.
+    if (!(await requireAdmin(req))) return res.status(401).json({ error: "Bu özellik için giriş yapmalısın." });
 
     const text = typeof req.body?.text === "string" ? req.body.text.trim() : "";
     if (!text) return res.status(400).json({ error: "Metin boş." });

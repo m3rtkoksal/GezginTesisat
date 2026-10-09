@@ -27,3 +27,7 @@ select{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;border:
 .tabs .tab.on{background:#0a2540;color:#fff}
 
 .gallery input{margin-top:4px;padding:6px 8px;font-size:13px}
+
+button.link{background:none;color:#0b6fb8;padding:0;font-weight:600;text-decoration:underline}
+.bar span{display:flex;gap:8px}
+.msg.err{color:#b42318}.msg.ok{color:#067647}

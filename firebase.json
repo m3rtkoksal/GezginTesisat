@@ -16,6 +16,20 @@
           "functionId": "rewrite",
           "region": "europe-west1"
         }
+      },
+      {
+        "source": "/api/quote",
+        "function": {
+          "functionId": "quote",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/api/adminSetup",
+        "function": {
+          "functionId": "adminSetup",
+          "region": "europe-west1"
+        }
       }
     ],
     "headers": [

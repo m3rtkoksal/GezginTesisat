@@ -1,7 +1,8 @@
 import { app } from "../content.js";
 import { loadContent, saveContent } from "../content.js";
 import { CATEGORIES } from "../categories.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { ADMIN_EMAIL } from "./auth-config.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const $ = (id) => document.getElementById(id);
@@ -13,6 +14,8 @@ if (!app) {
 }
 
 const auth = getAuth(app);
+auth.languageCode = "tr";
+$("adminEmail").textContent = ADMIN_EMAIL;
 const storage = getStorage(app);
 let gallery = [];
 
@@ -58,18 +61,64 @@ const renderGallery = () => {
   }
 };
 
+const authError = (e) => ({
+  "auth/invalid-credential": "Şifre hatalı. Şifreni unuttuysan aşağıdaki bağlantıya bas.",
+  "auth/wrong-password": "Şifre hatalı. Şifreni unuttuysan aşağıdaki bağlantıya bas.",
+  "auth/user-not-found": "Hesap henüz hazır değil. 'Şifremi unuttum / İlk şifreyi belirle'ye bas.",
+  "auth/too-many-requests": "Çok fazla deneme yapıldı. Biraz bekle ya da şifreni sıfırla.",
+  "auth/weak-password": "Şifre çok zayıf. En az 8 karakter kullan.",
+  "auth/requires-recent-login": "Güvenlik için çıkış yapıp tekrar giriş yap.",
+  "auth/network-request-failed": "Bağlantı hatası. İnternetini kontrol et.",
+}[e.code] || "İşlem başarısız: " + (e.code || e.message));
+
+const say = (id, text, kind = "") => { const el = $(id); el.textContent = text; el.className = "msg " + kind; };
+
 loginForm.onsubmit = async (e) => {
   e.preventDefault();
-  $("loginMsg").textContent = "";
-  try { await signInWithEmailAndPassword(auth, $("email").value, $("password").value); }
-  catch { $("loginMsg").textContent = "E-posta veya şifre hatalı."; }
+  say("loginMsg", "");
+  try { await signInWithEmailAndPassword(auth, ADMIN_EMAIL, $("password").value); $("password").value = ""; }
+  catch (err) { say("loginMsg", authError(err), "err"); }
 };
+
+// İlk şifre ve "unuttum" aynı akış: hesap yoksa sunucu açar (rastgele şifreyle), sonra yetkili e-postaya bağlantı gider.
+$("forgot").onclick = async () => {
+  say("loginMsg", "Gönderiliyor...");
+  try {
+    const r = await fetch("/api/adminSetup", { method: "POST" });
+    if (!r.ok) throw Object.assign(new Error((await r.json().catch(() => ({}))).error || "Hesap hazırlanamadı."), { code: "" });
+    // "Geri dön" bağlantısı sadece Firebase'in yetkili alan adlarında olur. Bu adres henüz yetkili değilse (ör. yeni alan adı
+    // doğrulanmadan) bağlantısız gönderilir, şifre yine de belirlenebilir.
+    try { await sendPasswordResetEmail(auth, ADMIN_EMAIL, { url: location.origin + "/admin/" }); }
+    catch (e) { if (e.code !== "auth/unauthorized-continue-uri") throw e; await sendPasswordResetEmail(auth, ADMIN_EMAIL); }
+    say("loginMsg", `Şifre belirleme bağlantısı ${ADMIN_EMAIL} adresine gönderildi. Gelen kutusuna, gelmezse spam klasörüne bak.`, "ok");
+  } catch (err) { say("loginMsg", err.message && !err.code ? err.message : authError(err), "err"); }
+};
+
 $("logout").onclick = () => signOut(auth);
 
-// Geçici: true iken giriş istenmez. Kurallar da (firestore.rules / storage.rules) açık olmalı.
-const OPEN_ADMIN = true;
+$("pwToggle").onclick = () => { $("pwBox").hidden = !$("pwBox").hidden; say("pwMsg", ""); };
+$("pwCancel").onclick = () => { $("pwBox").hidden = true; };
+$("pwSave").onclick = async () => {
+  const cur = $("pwCurrent").value, next = $("pwNext").value, again = $("pwAgain").value;
+  if (!cur) return say("pwMsg", "Mevcut şifreni yaz.", "err");
+  if (next.length < 8) return say("pwMsg", "Yeni şifre en az 8 karakter olmalı.", "err");
+  if (next !== again) return say("pwMsg", "Yeni şifreler aynı değil.", "err");
+  try {
+    const user = auth.currentUser;
+    await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, cur));
+    await updatePassword(user, next);
+    for (const id of ["pwCurrent", "pwNext", "pwAgain"]) $(id).value = "";
+    say("pwMsg", "Şifren güncellendi ✓", "ok");
+  } catch (err) { say("pwMsg", authError(err), "err"); }
+};
 
+// Sadece yetkili e-posta ve doğrulanmış hesap panele girer. Gerçek koruma güvenlik kurallarındadır, bu sadece arayüzdür.
 async function onUser(user) {
+  if (user && (user.email !== ADMIN_EMAIL || !user.emailVerified)) {
+    say("loginMsg", "Bu hesap yetkili değil.", "err");
+    await signOut(auth);
+    return;
+  }
   loginForm.hidden = !!user;
   editor.hidden = !user;
   if (!user) return;
@@ -79,8 +128,7 @@ async function onUser(user) {
   gallery = [...c.gallery];
   renderGallery();
 }
-if (OPEN_ADMIN) { $("logout").hidden = true; onUser(true); }
-else onAuthStateChanged(auth, onUser);
+onAuthStateChanged(auth, onUser);
 
 // Fotoğrafı en uzun kenarı 1600px olacak şekilde küçültüp JPEG'e çevirir.
 async function shrink(file, max = 1600, q = 0.85) {
@@ -153,7 +201,8 @@ document.querySelectorAll("button.ai").forEach((btn) => {
     btn.disabled = true; const old = btn.textContent; btn.textContent = "Yazılıyor...";
     aiBox.hidden = true;
     try {
-      const r = await fetch("/api/rewrite", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: el.value }) });
+      const token = await auth.currentUser.getIdToken();
+      const r = await fetch("/api/rewrite", { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${token}` }, body: JSON.stringify({ text: el.value }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Hata");
       aiTarget = el;
