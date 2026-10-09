@@ -1,12 +1,14 @@
 // Gezgin sitesindeki "Teklif Al" formu -> Ustaya API'sinde demo müşteri hesabı adına yeni iş (POST /jobs).
-// Tüm talepler tek bir müşteri hesabından açılır (DEMO_EMAIL). Şifresi Firebase secret'ında durur.
+// Tüm talepler tek bir müşteri hesabından açılır (USTAYA_ACCOUNT_EMAIL). Şifresi Firebase secret'ında durur.
 const { onRequest } = require("firebase-functions/v2/https");
-const { defineSecret } = require("firebase-functions/params");
+const { defineSecret, defineString } = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
 
 const API_BASE = "https://api.mika.technology";
-const DEMO_EMAIL = "demo.musteri@ustaya.app";
+// Taleplerin açıldığı Ustaya hesabı. E-posta functions/.env içinde, şifre Firebase secret'ında (kodda değil).
+// Hesabı değiştirmek için README'deki "Ustaya hesabını değiştirme" adımlarına bakın.
+const ACCOUNT_EMAIL = defineString("USTAYA_ACCOUNT_EMAIL", { default: "demo.musteri@ustaya.app" });
 const USTAYA_DEMO_PASSWORD = defineSecret("USTAYA_DEMO_PASSWORD");
 
 const DAILY_LIMIT = 30; // tüm site, günlük
@@ -68,7 +70,7 @@ async function ustayaLogin() {
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email: DEMO_EMAIL, password: USTAYA_DEMO_PASSWORD.value() }),
+    body: JSON.stringify({ email: ACCOUNT_EMAIL.value(), password: USTAYA_DEMO_PASSWORD.value() }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.accessToken) {
