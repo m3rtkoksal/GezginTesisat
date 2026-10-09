@@ -13,14 +13,23 @@
 
     <form id="loginForm" class="box">
       <h2>Giriş</h2>
-      <label>E-posta <input id="email" type="email" required autocomplete="username"></label>
+      <p class="hint">Bu panele sadece yetkili hesap girebilir: <strong id="adminEmail"></strong></p>
       <label>Şifre <input id="password" type="password" required autocomplete="current-password"></label>
       <button>Giriş yap</button>
-      <p id="loginMsg" class="msg"></p>
+      <p><button type="button" id="forgot" class="link">Şifremi unuttum / İlk şifreyi belirle</button></p>
+      <p id="loginMsg" class="msg" role="status"></p>
     </form>
 
     <form id="editor" class="box" hidden>
-      <div class="bar"><a href="/" target="_blank">Siteyi gör ↗</a> <button type="button" id="logout" class="ghost">Çıkış</button></div>
+      <div class="bar"><a href="/" target="_blank">Siteyi gör ↗</a> <span><button type="button" id="pwToggle" class="ghost">Şifreyi değiştir</button> <button type="button" id="logout" class="ghost">Çıkış</button></span></div>
+      <div id="pwBox" class="box ai-box" hidden>
+        <strong>Şifreyi değiştir</strong>
+        <label>Mevcut şifre <input id="pwCurrent" type="password" autocomplete="current-password"></label>
+        <label>Yeni şifre (en az 8 karakter) <input id="pwNext" type="password" autocomplete="new-password"></label>
+        <label>Yeni şifre (tekrar) <input id="pwAgain" type="password" autocomplete="new-password"></label>
+        <button type="button" id="pwSave">Şifreyi güncelle</button> <button type="button" id="pwCancel" class="ghost">Vazgeç</button>
+        <p id="pwMsg" class="msg" role="status"></p>
+      </div>
 
       <h2>Genel Bilgiler</h2>
       <label>İşletme adı <input name="businessName"></label>

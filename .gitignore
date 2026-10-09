@@ -1,4 +1,4 @@
-node_modules/
-.firebase/
-.DS_Store
 *.log
+.DS_Store
+.firebase/
+node_modules/
