@@ -58,3 +58,9 @@ Yetkili e-postayı değiştirmek için: iki kural dosyası, `functions/admin.js`
 
 **Testler:** `cd functions && npm test` (sunucu mantığı) ve repo kökünde
 `npx firebase-tools emulators:exec --only firestore,storage --project demo-gezgin "npm test --prefix rules-tests"` (güvenlik kuralları, emülatör gerekir).
+
+## Alan adı
+
+Site `https://gezgintadilat.com.tr` adresinde yayındadır (Firebase Hosting). `www` ve `http` bu adrese 301 ile yönlenir.
+DNS (Domainhizmetleri): `A` apex → `199.36.158.100`, `TXT` apex → `hosting-site=su-tesisat-site-mk`, `CNAME` www → `su-tesisat-site-mk.web.app`.
+SSL sertifikasını Firebase kendisi yeniler, ayrıca sertifika satın almaya gerek yoktur.

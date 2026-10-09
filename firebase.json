@@ -7,9 +7,24 @@
       "*.rules",
       "firestore.indexes.json",
       "**/.*",
-      "functions/**"
+      "functions/**",
+      "*.template.html"
     ],
     "rewrites": [
+      {
+        "source": "/",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/index.html",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
       {
         "source": "/api/rewrite",
         "function": {
@@ -35,15 +50,6 @@
     "headers": [
       {
         "source": "**/*.@(js|html|css)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-cache"
-          }
-        ]
-      },
-      {
-        "source": "/",
         "headers": [
           {
             "key": "Cache-Control",

@@ -14,7 +14,11 @@
     <form id="loginForm" class="box">
       <h2>Giriş</h2>
       <p class="hint">Bu panele sadece yetkili hesap girebilir: <strong id="adminEmail"></strong></p>
-      <label>Şifre <input id="password" type="password" required autocomplete="current-password"></label>
+      <!-- Tarayıcının şifre yöneticisi doğru e-posta/şifre çiftini kaydetsin ve doldursun diye. Görünmez ama formun içinde. -->
+      <input id="username" class="vh" type="email" name="username" value="" autocomplete="username" tabindex="-1" aria-hidden="true" readonly>
+      <label>Şifre
+        <span class="pw"><input id="password" type="password" required autocomplete="current-password"><button type="button" id="showPw" class="ghost" aria-label="Şifreyi göster">Göster</button></span>
+      </label>
       <button>Giriş yap</button>
       <p><button type="button" id="forgot" class="link">Şifremi unuttum / İlk şifreyi belirle</button></p>
       <p id="loginMsg" class="msg" role="status"></p>

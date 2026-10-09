@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gezgin Tesisat &amp; Tadilat</title>
-  <meta name="description" content="Gezgin Tesisat &amp; Tadilat: su tesisatı, mekanik tesisat, yangın tesisatı ve tadilat işleri.">
+  {{head}}
   <meta name="theme-color" content="#0a2540">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +22,7 @@
           <g transform="rotate(40 24 28)" fill="#0284c7"><rect x="22.200" y="24" width="3.600" height="13" rx="1.800"/><path d="M19.800 24v-5.200a4.200 4.200 0 0 1 8.400 0V24h-2.800v-4.800h-2.800V24z"/></g>
         </svg>
         <span class="word"><b>GEZGİN</b><i>TESİSAT &amp; TADİLAT</i></span>
-        <strong id="brand" class="sr"></strong>
+        <strong id="brand" class="sr">{{name}}</strong>
       </a>
       <nav class="links">
         <a href="#services">Hizmetler</a>
@@ -32,7 +31,7 @@
         <a href="#contact">İletişim</a>
         <a href="#teklif" class="navquote"><img class="uicon sm" src="ustaya-icon.png" alt="" width="20" height="20">Teklif Al</a>
       </nav>
-      <a id="callTop" class="pill" href="#"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg><span id="phoneTop"></span></a>
+      <a id="callTop" class="pill" href="{{tel}}"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg><span id="phoneTop">{{phone}}</span></a>
     </div>
   </header>
 
@@ -42,11 +41,11 @@
       <div class="wrap hero-in">
         <div class="hero-text">
           <span class="chip live"><span class="dot"></span> Konut · İş yeri · Sanayi tesisleri</span>
-          <h1 id="heroTitle"></h1>
-          <p id="tagline" class="lead"></p>
+          <h1 id="heroTitle">{{name}}</h1>
+          <p id="tagline" class="lead">{{tagline}}</p>
           <div class="cta">
-            <a id="callBtn" class="btn primary" href="#"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>Hemen Ara</a>
-            <a id="waBtn" class="btn wa" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.100-1.500-1.100-2.800 0-1.300.7-1.900.9-2.200.2-.3.5-.3.700-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.600.2.300.8 1.300 1.700 2.100 1.100 1 2 1.300 2.300 1.400.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.700-.1l1.900.9c.3.1.5.2.5.3.100.200.100.800-.100 1.400z"/></svg>WhatsApp</a>
+            <a id="callBtn" class="btn primary" href="{{tel}}"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>Hemen Ara</a>
+            <a id="waBtn" class="btn wa" href="{{wa}}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.100-1.500-1.100-2.800 0-1.300.7-1.900.9-2.200.2-.3.5-.3.700-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.600.2.300.8 1.300 1.700 2.100 1.100 1 2 1.300 2.300 1.400.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.700-.1l1.900.9c.3.1.5.2.5.3.100.200.100.800-.100 1.400z"/></svg>WhatsApp</a>
             <a class="btn ghost quote" href="#teklif"><img class="uicon" src="ustaya-icon.png" alt="" width="28" height="28">Teklif Al</a>
           </div>
         </div>
@@ -64,7 +63,44 @@
       <div class="wrap">
         <p class="eyebrow">Hizmetlerimiz</p>
         <h2>Her tesisat sorununa<br>tek numara</h2>
-        <div class="grid" id="serviceList"></div>
+        <div class="grid" id="serviceList">{{services}}</div>
+      </div>
+    </section>
+
+    <section id="neler" class="sec">
+      <div class="wrap seo-text">
+        <p class="eyebrow">Neler yapıyoruz</p>
+        <h2>İstanbul'da tesisat, tamirat, tadilat ve yangın tesisatı</h2>
+        <div class="seo-grid">
+          <article>
+            <h3>Yangın tesisatı</h3>
+            <p>Yangın tesisatı kurulumu ve bakımı. İstanbul'da iş yeri ve sanayi tesislerinde yangın hattı işlerini planlıyor, uyguluyor ve bakımını yapıyoruz.</p>
+          </article>
+          <article>
+            <h3>Doğalgaz ve gaz tesisatı</h3>
+            <p>Doğalgaz hattı ve gaz tesisatı işleri: mutfak ve iş yeri gaz hatları, bağlantı ve montaj.</p>
+          </article>
+          <article>
+            <h3>Pompa ve vana</h3>
+            <p>Pompa grubu kurulumu ve bakımı, vana değişimi ve kolektör hatları. Teknik odalarda ve binalarda mekanik tesisat işleri.</p>
+          </article>
+          <article>
+            <h3>Isıtma tesisatı</h3>
+            <p>Isıtma kolektörü ve ısıtma hattı işleri: kurulum, yenileme ve bakım.</p>
+          </article>
+          <article>
+            <h3>Su ve gider tesisatı</h3>
+            <p>Su tesisatı kurulumu, yenileme ve arıza onarımı. Pis su ve gider hattı yenileme, kazı ve boru döşeme.</p>
+          </article>
+          <article>
+            <h3>Demir doğrama ve çit</h3>
+            <p>Demir kapı, korkuluk, demir çit ve tel çit işleri: ölçü, imalat ve montaj.</p>
+          </article>
+          <article>
+            <h3>Tadilat ve tamirat</h3>
+            <p>Gezgin Tadilat olarak karo, boya, banyo ve WC yenileme ile genel tadilat işlerini; tesisat tamiratı gibi tamirat işlerini bir arada yürütüyoruz.</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -85,10 +121,10 @@
         <div>
           <p class="eyebrow">Hakkımızda</p>
           <h2>Güvenilir, hızlı<br>ve temiz iş</h2>
-          <p id="aboutText" class="muted"></p>
-          <div class="areas-wrap" id="areasWrap">
+          <p id="aboutText" class="muted">{{about}}</p>
+          <div class="areas-wrap" id="areasWrap"{{areasHidden}}>
             <h3>Hizmet bölgeleri</h3>
-            <div id="areas" class="chips"></div>
+            <div id="areas" class="chips">{{areas}}</div>
           </div>
         </div>
         <ul class="checks">
@@ -101,12 +137,12 @@
       </div>
     </section>
 
-    <section id="gallery" class="sec alt">
+    <section id="gallery" class="sec alt"{{galleryHidden}}>
       <div class="wrap">
         <p class="eyebrow">Çalışmalarımız</p>
         <h2>Yaptığımız işlerden</h2>
-        <div class="tabs" id="galleryTabs" role="tablist" aria-label="Çalışma kategorileri"></div>
-        <div class="photos" id="galleryList"></div>
+        <div class="tabs" id="galleryTabs" role="tablist" aria-label="Çalışma kategorileri">{{galleryTabs}}</div>
+        <div class="photos" id="galleryList">{{gallery}}</div>
       </div>
     </section>
 
@@ -150,14 +186,14 @@
             <p class="eyebrow light">İletişim</p>
             <h2>İşiniz için<br>hemen arayın.</h2>
             <ul class="info">
-              <li><span>📞</span><a id="phoneLink" href="#"></a></li>
-              <li><span>🕒</span><em id="hours"></em></li>
-              <li><span>📍</span><em id="address"></em></li>
+              <li><span>📞</span><a id="phoneLink" href="{{tel}}">{{phone}}</a></li>
+              <li{{hoursHidden}}><span>🕒</span><em id="hours">{{hours}}</em></li>
+              <li{{addressHidden}}><span>📍</span><em id="address">{{address}}</em></li>
             </ul>
           </div>
           <div class="contact-cta">
-            <a id="callBtn2" class="btn primary big" href="#">📞 Şimdi Ara</a>
-            <a id="waBtn2" class="btn wa big" href="#" target="_blank" rel="noopener">WhatsApp'tan Yaz</a>
+            <a id="callBtn2" class="btn primary big" href="{{tel}}">📞 Şimdi Ara</a>
+            <a id="waBtn2" class="btn wa big" href="{{wa}}" target="_blank" rel="noopener">WhatsApp'tan Yaz</a>
             <a class="btn ghost big" href="#teklif"><img class="uicon" src="ustaya-icon.png" alt="" width="28" height="28">Teklif Al</a>
           </div>
         </div>
@@ -166,12 +202,12 @@
   </main>
 
   <footer>
-    <div class="wrap foot">© <span id="year"></span> <span id="footBrand"></span>. Tüm hakları saklıdır.</div>
+    <div class="wrap foot">© <span id="year">{{year}}</span> <span id="footBrand">{{name}}</span>. Tüm hakları saklıdır.</div>
   </footer>
 
   <div class="mbar">
-    <a id="callBar" href="#">📞 Ara</a>
-    <a id="waBar" href="#" target="_blank" rel="noopener" class="g">💬 WhatsApp</a>
+    <a id="callBar" href="{{tel}}">📞 Ara</a>
+    <a id="waBar" href="{{wa}}" target="_blank" rel="noopener" class="g">💬 WhatsApp</a>
   </div>
 
   <dialog id="lightbox"><img alt=""><p id="lbCap"></p><button aria-label="Kapat">✕</button></dialog>

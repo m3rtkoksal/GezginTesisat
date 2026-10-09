@@ -7,6 +7,7 @@ const ANTHROPIC_API_KEY = defineSecret("ANTHROPIC_API_KEY");
 
 // Teklif formu -> Ustaya API (functions/quote.js). admin.initializeApp() sonrası yüklenmeli.
 exports.quote = require("./quote").quote;
+exports.site = require("./site").site;
 const { requireAdmin, adminSetup } = require("./admin");
 exports.adminSetup = adminSetup;
 

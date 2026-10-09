@@ -185,3 +185,7 @@ dialog button{position:absolute;top:-14px;right:-14px;width:38px;height:38px;bor
 .qnote{margin:6px 0 0;font-size:13px;color:var(--muted)}
 .qform .btn:disabled{opacity:.6;cursor:wait}
 @media(max-width:620px){.qgrid{grid-template-columns:1fr}.qform{padding:20px;border-radius:20px}}
+
+.seo-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.seo-grid h3{font-size:18px;margin:0 0 6px;color:var(--blue)}
+.seo-grid p{margin:0;color:var(--muted)}
