@@ -86,7 +86,10 @@ $("forgot").onclick = async () => {
   try {
     const r = await fetch("/api/adminSetup", { method: "POST" });
     if (!r.ok) throw Object.assign(new Error((await r.json().catch(() => ({}))).error || "Hesap hazırlanamadı."), { code: "" });
-    await sendPasswordResetEmail(auth, ADMIN_EMAIL, { url: location.origin + "/admin/" });
+    // "Geri dön" bağlantısı sadece Firebase'in yetkili alan adlarında olur. Bu adres henüz yetkili değilse (ör. yeni alan adı
+    // doğrulanmadan) bağlantısız gönderilir, şifre yine de belirlenebilir.
+    try { await sendPasswordResetEmail(auth, ADMIN_EMAIL, { url: location.origin + "/admin/" }); }
+    catch (e) { if (e.code !== "auth/unauthorized-continue-uri") throw e; await sendPasswordResetEmail(auth, ADMIN_EMAIL); }
     say("loginMsg", `Şifre belirleme bağlantısı ${ADMIN_EMAIL} adresine gönderildi. Gelen kutusuna, gelmezse spam klasörüne bak.`, "ok");
   } catch (err) { say("loginMsg", err.message && !err.code ? err.message : authError(err), "err"); }
 };
