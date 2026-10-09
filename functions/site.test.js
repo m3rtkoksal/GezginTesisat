@@ -154,3 +154,17 @@ test("ana sayfa dört hizmet sayfasına bağlanır ve sitemap hepsini içerir", 
   const sm = fs.readFileSync(path.join(__dirname, "..", "sitemap.xml"), "utf8");
   for (const p of ["/tesisat", "/mekanik", "/yangin-gaz", "/tadilat"]) assert.ok(sm.includes(`https://gezgintadilat.com.tr${p}</loc>`), p);
 });
+
+test("favicon dosyaları var ve her iki şablonda bağlı", () => {
+  const root = path.join(__dirname, "..");
+  for (const f of ["favicon.ico", "icon-48.png", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "icon.svg"]) {
+    assert.ok(fs.existsSync(path.join(root, f)), f);
+  }
+  const png = fs.readFileSync(path.join(root, "icon-48.png"));
+  assert.equal(png.readUInt32BE(16), 48); // genişlik
+  assert.equal(png.readUInt32BE(20), 48); // yükseklik
+  for (const tpl of ["template.html", "page.html"]) {
+    const h = fs.readFileSync(path.join(__dirname, tpl), "utf8");
+    for (const href of ["/favicon.ico", "/icon-48.png", "/icon-192.png", "/icon.svg", "/apple-touch-icon.png"]) assert.ok(h.includes(`href="${href}"`), `${tpl} ${href}`);
+  }
+});
