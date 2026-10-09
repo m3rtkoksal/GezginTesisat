@@ -168,3 +168,9 @@ test("favicon dosyaları var ve her iki şablonda bağlı", () => {
     for (const href of ["/favicon.ico", "/icon-48.png", "/icon-192.png", "/icon.svg", "/apple-touch-icon.png"]) assert.ok(h.includes(`href="${href}"`), `${tpl} ${href}`);
   }
 });
+
+test("açık zeminde 'Diğer hizmetler' bağlantıları koyu yazıyla görünür", () => {
+  const css = fs.readFileSync(path.join(__dirname, "..", "style.css"), "utf8");
+  assert.match(css, /\.lp-more \.btn\.ghost\s*\{[^}]*color:\s*var\(--ink\)/);
+  assert.doesNotMatch(css.match(/\.lp-more \.btn\.ghost\s*\{[^}]*\}/)[0], /color:\s*#fff/);
+});
