@@ -31,3 +31,8 @@ select{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;border:
 button.link{background:none;color:#0b6fb8;padding:0;font-weight:600;text-decoration:underline}
 .bar span{display:flex;gap:8px}
 .msg.err{color:#b42318}.msg.ok{color:#067647}
+
+.vh{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.pw{display:flex;gap:8px;align-items:stretch}
+.pw input{margin-top:4px}
+.pw button{margin-top:4px;padding:0 14px}

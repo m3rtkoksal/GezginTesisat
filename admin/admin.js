@@ -16,6 +16,12 @@ if (!app) {
 const auth = getAuth(app);
 auth.languageCode = "tr";
 $("adminEmail").textContent = ADMIN_EMAIL;
+$("username").value = ADMIN_EMAIL;
+$("showPw").onclick = () => {
+  const p = $("password"), show = p.type === "password";
+  p.type = show ? "text" : "password";
+  $("showPw").textContent = show ? "Gizle" : "Göster";
+};
 const storage = getStorage(app);
 let gallery = [];
 
@@ -77,7 +83,7 @@ loginForm.onsubmit = async (e) => {
   e.preventDefault();
   say("loginMsg", "");
   try { await signInWithEmailAndPassword(auth, ADMIN_EMAIL, $("password").value); $("password").value = ""; }
-  catch (err) { say("loginMsg", authError(err), "err"); }
+  catch (err) { say("loginMsg", authError(err) + (err.code ? ` (${err.code})` : ""), "err"); }
 };
 
 // İlk şifre ve "unuttum" aynı akış: hesap yoksa sunucu açar (rastgele şifreyle), sonra yetkili e-postaya bağlantı gider.
