@@ -35,4 +35,64 @@ const SEO = {
   keywords: "İstanbul tadilat, demir doğrama, çit, demir çit, İstanbul yangın tesisatı, Gezgin Tadilat, Gezgin Tamirat, yangın tesisatı, su tesisatı tamiratı, mekanik tesisat, tadilat",
 };
 
-module.exports = { CATEGORIES, defaults, SEO };
+
+// Hizmet sayfaları. Metinler sitedeki mevcut hizmet adlarından ve işletmenin verdiği başlıklardan türetildi,
+// burada olmayan bir iş, rakam veya garanti iddiası eklenmez. İlçe bilgisi gelince `areas` panelden dolar.
+const PAGES = {
+  tesisat: {
+    path: "/tesisat",
+    nav: "Tesisat",
+    h1: "İstanbul Su Tesisatı ve Gider Hatları",
+    title: "Su Tesisatı ve Gider Hatları İstanbul",
+    desc: "İstanbul su tesisatı, pis su ve gider hattı, banyo ve WC yenileme işleri. Kurulum, yenileme ve arıza onarımı.",
+    lead: "Su tesisatı ve gider hatlarında yeni kurulum, yenileme ve arıza onarımı yapıyoruz.",
+    items: [
+      ["Su tesisatı", "Yeni kurulum, yenileme ve arıza onarımı."],
+      ["Pis su ve gider hatları", "Kazı, boru döşeme ve gider hattı yenileme."],
+      ["Banyo ve WC yenileme", "Islak hacim tesisatı, karo ve montaj işleri."],
+    ],
+    keywords: "İstanbul su tesisatı, gider hattı, pis su hattı, banyo yenileme, WC yenileme, tesisat tamiratı",
+  },
+  mekanik: {
+    path: "/mekanik",
+    nav: "Mekanik",
+    h1: "İstanbul Mekanik Tesisat: Isıtma, Pompa ve Vana",
+    title: "Mekanik Tesisat, Isıtma, Pompa ve Vana İstanbul",
+    desc: "İstanbul mekanik tesisat, ısıtma kolektörü ve hattı, pompa grubu, vana değişimi ve bakımı.",
+    lead: "Isıtma, pompa ve vana işleri dahil mekanik tesisat işlerini yapıyoruz.",
+    items: [
+      ["Mekanik tesisat", "Isıtma kolektörü, pompa ve mekanik tesisat işleri."],
+      ["Pompa ve vana", "Pompa grubu, vana değişimi ve bakımı."],
+      ["Isıtma tesisatı", "Isıtma kolektörü ve ısıtma hattı işleri."],
+    ],
+    keywords: "İstanbul mekanik tesisat, ısıtma tesisatı, ısıtma kolektörü, pompa, vana değişimi, pompa grubu",
+  },
+  "yangin-gaz": {
+    path: "/yangin-gaz",
+    nav: "Yangın & Gaz",
+    h1: "İstanbul Yangın Tesisatı ve Doğalgaz Tesisatı",
+    title: "Yangın Tesisatı ve Doğalgaz Tesisatı İstanbul",
+    desc: "İstanbul yangın tesisatı kurulumu ve bakımı, doğalgaz hattı ve gaz tesisatı işleri.",
+    lead: "Yangın tesisatı kurulumu ve bakımı ile doğalgaz hattı ve gaz tesisatı işlerini yapıyoruz.",
+    items: [
+      ["Yangın tesisatı", "Yangın tesisatı kurulumu ve bakımı."],
+      ["Doğalgaz tesisatı", "Doğalgaz hattı ve gaz tesisatı işleri."],
+    ],
+    keywords: "İstanbul yangın tesisatı, yangın tesisatı kurulumu, doğalgaz tesisatı, gaz tesisatı, gaz hattı",
+  },
+  tadilat: {
+    path: "/tadilat",
+    nav: "Tadilat",
+    h1: "İstanbul Tadilat ve Tamirat: Boya, Karo, Mala",
+    title: "Tadilat, Boya, Karo, Demir Doğrama İstanbul",
+    desc: "İstanbul tadilat ve tamirat: boya, karo, mala, genel tadilat, demir doğrama, demir çit ve tel çit işleri.",
+    lead: "Boya, karo ve mala işleri ile genel tadilat, tamirat, demir doğrama ve çit işlerini yapıyoruz.",
+    items: [
+      ["Tadilat ve boya", "Karo, boya ve genel tadilat işleri."],
+      ["Demir doğrama ve çit", "Demir kapı, korkuluk, çit ve tel çit işleri."],
+    ],
+    keywords: "İstanbul tadilat, tamirat, boya, karo, mala, demir doğrama, demir çit, tel çit",
+  },
+};
+
+module.exports = { CATEGORIES, defaults, SEO, PAGES };

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{head}}
+  <meta name="theme-color" content="#0a2540">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%230ea5e9'/%3E%3Cpath d='M24 7c7.200 8.400 12 13.600 12 20.400a12 12 0 0 1-24 0C12 20.600 16.800 15.400 24 7z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="lp-body">
+  <header class="nav solid" id="nav">
+    <div class="wrap nav-in">
+      <a href="/" class="brand"><span class="word"><b>GEZGİN</b><i>TESİSAT &amp; TADİLAT</i></span></a>
+      <nav class="links">
+        <a href="/">Ana sayfa</a>
+        {{navLinks}}
+        <a href="/#teklif" class="navquote">Teklif Al</a>
+      </nav>
+      <a class="pill" href="{{tel}}"><span>{{phone}}</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="lp-hero">
+      <div class="wrap">
+        <nav class="crumbs" aria-label="Sayfa yolu"><a href="/">Ana sayfa</a> › <span>{{crumb}}</span></nav>
+        <h1>{{h1}}</h1>
+        <p class="lead">{{lead}}</p>
+        <div class="cta">
+          <a class="btn primary" href="{{tel}}">Hemen Ara: {{phone}}</a>
+          <a class="btn wa" href="{{wa}}" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn ghost quote" href="/#teklif">Teklif Al</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <p class="eyebrow">Yaptığımız işler</p>
+        <h2>{{crumb}} hizmetleri</h2>
+        <div class="seo-grid">{{items}}</div>
+        <p class="lp-note">İstanbul'un Avrupa ve Anadolu yakasının tamamında hizmet veriyoruz. İşinizi anlatın, size dönüş yapıp teklif verelim.</p>
+      </div>
+    </section>
+
+    <section class="sec alt">
+      <div class="wrap">
+        <p class="eyebrow">Diğer hizmetler</p>
+        <div class="lp-more">{{others}}</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">© {{year}} {{name}}. Tüm hakları saklıdır. · <a href="/">Ana sayfa</a></div>
+  </footer>
+
+  <div class="mbar">
+    <a href="{{tel}}">📞 Ara</a>
+    <a href="{{wa}}" target="_blank" rel="noopener" class="g">💬 WhatsApp</a>
+  </div>
+</body>
+</html>

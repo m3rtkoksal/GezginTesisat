@@ -4,7 +4,7 @@ const { onRequest } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const fs = require("fs");
 const path = require("path");
-const { CATEGORIES, defaults, SEO } = require("./shared");
+const { CATEGORIES, defaults, SEO, PAGES } = require("./shared");
 
 const SITE_URL = "https://gezgintadilat.com.tr";
 const ICONS = ["🔍", "🚿", "🔧", "🚰", "🔥", "💧", "🛠️", "🧰"];
@@ -138,8 +138,72 @@ function render(template, content, now = new Date()) {
   return template.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in values ? values[k] : m));
 }
 
+/** Hizmet sayfası: sabit metin (shared.js PAGES) + panelden gelen telefon ve işletme adı. */
+function renderPage(template, key, content, now = new Date()) {
+  const pg = PAGES[key];
+  if (!pg) return null;
+  const c = { ...defaults, ...content };
+  const wa = "https://wa.me/" + digits(c.whatsapp).replace("+", "");
+  const url = SITE_URL + pg.path;
+  const title = `${pg.title} | ${c.businessName}`;
+  const tel = intlPhone(c.phone);
+  const ld = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: pg.h1,
+      serviceType: pg.nav,
+      description: pg.desc,
+      areaServed: [{ "@type": "City", name: SEO.city }, { "@type": "AdministrativeArea", name: "Avrupa Yakası" }, { "@type": "AdministrativeArea", name: "Anadolu Yakası" }],
+      provider: { "@type": "Plumber", name: c.businessName, alternateName: SEO.altNames, url: SITE_URL + "/", ...(tel ? { telephone: tel } : {}) },
+      url,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Ana sayfa", item: SITE_URL + "/" },
+        { "@type": "ListItem", position: 2, name: pg.nav, item: url },
+      ],
+    },
+  ];
+  const head = [
+    `<title>${esc(title)}</title>`,
+    `<meta name="description" content="${esc(clip(pg.desc + (c.phone ? ` Ara: ${c.phone}` : ""), 158))}">`,
+    `<meta name="keywords" content="${esc(pg.keywords)}">`,
+    `<link rel="canonical" href="${url}">`,
+    `<meta property="og:type" content="website">`,
+    `<meta property="og:locale" content="tr_TR">`,
+    `<meta property="og:site_name" content="${esc(c.businessName)}">`,
+    `<meta property="og:title" content="${esc(title)}">`,
+    `<meta property="og:description" content="${esc(pg.desc)}">`,
+    `<meta property="og:url" content="${url}">`,
+    ...ld.map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`),
+  ].join("\n  ");
+  const year = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Istanbul" })).getFullYear();
+  const link = (k, cls = "") => `<a href="${PAGES[k].path}"${cls}>${esc(PAGES[k].nav)}</a>`;
+  const values = {
+    head,
+    h1: esc(pg.h1),
+    lead: esc(pg.lead),
+    crumb: esc(pg.nav),
+    name: esc(c.businessName),
+    phone: esc(c.phone),
+    tel: esc("tel:" + digits(c.phone)),
+    wa: esc(wa),
+    year: String(year),
+    navLinks: Object.keys(PAGES).map((k) => link(k)).join(""),
+    items: pg.items.map(([t, d]) => `<article><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join(""),
+    others: Object.keys(PAGES).filter((k) => k !== key).map((k) => link(k, ' class="btn ghost"')).join(""),
+  };
+  return template.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in values ? values[k] : m));
+}
+
 let templateCache;
 const loadTemplate = () => (templateCache ??= fs.readFileSync(path.join(__dirname, "template.html"), "utf8"));
+let pageCache;
+const loadPage = () => (pageCache ??= fs.readFileSync(path.join(__dirname, "page.html"), "utf8"));
+const pageKeyOf = (p) => Object.keys(PAGES).find((k) => PAGES[k].path === String(p || "/").replace(/\/+$/, ""));
 
 const site = onRequest({ region: "europe-west1", maxInstances: 3 }, async (req, res) => {
   if (req.method !== "GET" && req.method !== "HEAD") return res.status(405).send("Method Not Allowed");
@@ -153,7 +217,8 @@ const site = onRequest({ region: "europe-west1", maxInstances: 3 }, async (req, 
   res.set("Content-Type", "text/html; charset=utf-8");
   // CDN 5 dakika saklar. Tarayıcıdaki script zaten canlı içerikle günceller.
   res.set("Cache-Control", "public, max-age=0, s-maxage=300, stale-while-revalidate=600");
-  res.status(200).send(render(loadTemplate(), content));
+  const key = pageKeyOf(req.path);
+  res.status(200).send(key ? renderPage(loadPage(), key, content) : render(loadTemplate(), content));
 });
 
-module.exports = { render, buildHead, intlPhone, site };
+module.exports = { render, renderPage, buildHead, intlPhone, site };

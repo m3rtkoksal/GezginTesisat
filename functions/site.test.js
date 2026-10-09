@@ -127,3 +127,30 @@ test("hizmet satırları ve görünür bölümde istenen anahtar kelimeler var",
   assert.ok(h.includes("<h3>Doğalgaz Tesisatı</h3>"));
   assert.deepEqual(ld(h).knowsAbout, SEO.topics);
 });
+
+test("hizmet sayfaları: her biri kendi başlığı, canonical, JSON-LD ve bölge bilgisiyle gelir", () => {
+  const { renderPage } = require("./site");
+  const { PAGES } = require("./shared");
+  const tpl = fs.readFileSync(path.join(__dirname, "page.html"), "utf8");
+  for (const k of Object.keys(PAGES)) {
+    const h = renderPage(tpl, k, {}, new Date("2026-10-09T12:00:00Z"));
+    assert.doesNotMatch(h, /\{\{\w+\}\}/, k);
+    assert.ok(h.includes(`<link rel="canonical" href="https://gezgintadilat.com.tr${PAGES[k].path}">`), k);
+    assert.match(h, /<h1>İstanbul /, k);
+    assert.ok(h.includes("Avrupa ve Anadolu yakasının tamamında"), k);
+    assert.ok(h.includes('href="tel:05386049140"'), k);
+    for (const [t] of PAGES[k].items) assert.ok(h.includes(`<h3>${t}</h3>`), t);
+    const blocks = [...h.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map((m) => JSON.parse(m[1]));
+    assert.equal(blocks.length, 2);
+    assert.equal(blocks[0]["@type"], "Service");
+    assert.equal(blocks[1]["@type"], "BreadcrumbList");
+  }
+  assert.equal(renderPage(tpl, "yok", {}), null);
+});
+
+test("ana sayfa dört hizmet sayfasına bağlanır ve sitemap hepsini içerir", () => {
+  const h = page();
+  for (const p of ["/tesisat", "/mekanik", "/yangin-gaz", "/tadilat"]) assert.ok(h.includes(`href="${p}"`), p);
+  const sm = fs.readFileSync(path.join(__dirname, "..", "sitemap.xml"), "utf8");
+  for (const p of ["/tesisat", "/mekanik", "/yangin-gaz", "/tadilat"]) assert.ok(sm.includes(`https://gezgintadilat.com.tr${p}</loc>`), p);
+});

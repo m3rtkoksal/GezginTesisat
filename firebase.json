@@ -12,6 +12,34 @@
     ],
     "rewrites": [
       {
+        "source": "/tesisat",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/mekanik",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/yangin-gaz",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/tadilat",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
         "source": "/",
         "function": {
           "functionId": "site",
