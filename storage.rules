@@ -1,10 +1,17 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "umitkurt360@gmail.com"
+        && request.auth.token.email_verified == true;
+    }
+
     match /gallery/{file} {
       allow read: if true;
-      // GEÇİCİ: giriş yok; sadece <5MB resim eklenebilir, silme/değiştirme yok.
-      allow create: if request.resource.size < 5 * 1024 * 1024
+      // Sadece yönetici resim ekleyebilir (5 MB'a kadar). Başka kimseye yazma, silme izni verilmez.
+      allow create: if isAdmin()
+                    && request.resource.size < 5 * 1024 * 1024
                     && request.resource.contentType.matches('image/.*');
     }
   }

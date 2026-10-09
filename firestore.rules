@@ -1,9 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // GEÇİCİ: giriş yok. Girişi geri açmak için write kuralını e-posta kontrolüne çevir.
+    // Sadece e-postası doğrulanmış yönetici içeriği değiştirebilir. Diğer koleksiyonlar (leads, usage...) sadece sunucudan.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "umitkurt360@gmail.com"
+        && request.auth.token.email_verified == true;
+    }
+
     match /site/content {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAdmin();
     }
   }
 }
