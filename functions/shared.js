@@ -1,5 +1,8 @@
-// Firebase bağlanmadan / içerik girilmeden önce kullanılan varsayılan içerik.
-export const defaults = {
+// Sunucu tarafı sayfa üretimi için sitenin ortak verileri. Kök dizindeki defaults.js ve categories.js ile aynı kalmalı
+// (site.test.js bunu denetler).
+const CATEGORIES = ["Su & Gider", "Mekanik", "Doğalgaz", "Tadilat", "Çit & Demir"];
+
+const defaults = {
   businessName: "Gezgin Tesisat & Tadilat",
   tagline: "Güvenli Tesisat, Modern Yaşam Alanları",
   phone: "0538 604 91 40",
@@ -22,3 +25,14 @@ export const defaults = {
   ],
   gallery: []
 };
+
+// Arama motorlarına "bu işletme şu adlarla da aranır" demek için (schema.org alternateName). Başlık ve açıklamada da geçer.
+// İşletmenin gerçek adı panelden değişir. Bu liste sadece arama adlarıdır, sitede ad olarak gösterilmez.
+const SEO = {
+  altNames: ["Gezgin Tadilat", "Gezgin Tamirat", "Gezgin Tesisat", "Gezgin Yangın Tesisatı", "Gezgin Mekanik Tesisat"],
+  city: "İstanbul",
+  topics: ["Yangın tesisatı", "Doğalgaz tesisatı", "Pompa", "Vana", "Isıtma tesisatı", "Mekanik tesisat", "Su tesisatı", "Gider ve pis su hattı", "Banyo ve WC yenileme", "Tadilat", "Tamirat", "Demir doğrama", "Demir çit", "Çit"],
+  keywords: "İstanbul tadilat, demir doğrama, çit, demir çit, İstanbul yangın tesisatı, Gezgin Tadilat, Gezgin Tamirat, yangın tesisatı, su tesisatı tamiratı, mekanik tesisat, tadilat",
+};
+
+module.exports = { CATEGORIES, defaults, SEO };
