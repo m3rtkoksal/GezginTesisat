@@ -171,3 +171,17 @@ dialog button{position:absolute;top:-14px;right:-14px;width:38px;height:38px;bor
 .uicon.sm{width:20px;height:20px;border-radius:6px;box-shadow:none}
 .btn .uicon{margin-left:-6px}
 .navquote{display:inline-flex;align-items:center;gap:7px}
+
+/* teklif formu */
+.qform{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px;max-width:760px;box-shadow:0 18px 44px rgba(10,37,64,.08)}
+.qgrid{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.qform label{display:block;font-weight:700;font-size:14px;color:var(--navy);margin-bottom:14px}
+.qform input,.qform select,.qform textarea{display:block;width:100%;margin-top:6px;padding:13px 14px;font:inherit;font-size:16px;font-weight:500;color:var(--ink);border:1.5px solid #cfdbe7;border-radius:12px;background:#fff}
+.qform input:focus,.qform select:focus,.qform textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(14,165,233,.18)}
+.qform .btn.big{margin-top:4px}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+.qmsg{min-height:1.4em;margin:12px 0 0;font-weight:700}
+.qmsg.err{color:#b42318}.qmsg.ok{color:#067647}
+.qnote{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.qform .btn:disabled{opacity:.6;cursor:wait}
+@media(max-width:620px){.qgrid{grid-template-columns:1fr}.qform{padding:20px;border-radius:20px}}

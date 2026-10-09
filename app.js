@@ -73,3 +73,26 @@ addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
 const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: .12 });
 document.querySelectorAll(".card,.steps li,.contact,.checks li").forEach((el) => { el.classList.add("rv"); io.observe(el); });
+
+// --- Teklif formu -> /api/quote (Ustaya API'sinde yeni iş) ---
+const qf = $("quoteForm");
+if (qf) {
+  qf.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("quoteMsg"), btn = qf.querySelector("button[type=submit]");
+    const body = Object.fromEntries(new FormData(qf));
+    msg.className = "qmsg"; msg.textContent = "";
+    btn.disabled = true;
+    try {
+      const r = await fetch("/api/quote", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || "Talep gönderilemedi.");
+      qf.reset();
+      qf.elements.city.value = "İstanbul";
+      msg.className = "qmsg ok"; msg.textContent = "Talebiniz alındı. En kısa sürede size dönüş yapacağız.";
+    } catch (err) {
+      msg.className = "qmsg err"; msg.textContent = err.message;
+    }
+    btn.disabled = false;
+  });
+}
