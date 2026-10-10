@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://gezgintadilat.com.tr/</loc></url>
-  <url><loc>https://gezgintadilat.com.tr/tesisat</loc></url>
-  <url><loc>https://gezgintadilat.com.tr/mekanik</loc></url>
-  <url><loc>https://gezgintadilat.com.tr/yangin-gaz</loc></url>
-  <url><loc>https://gezgintadilat.com.tr/tadilat</loc></url>
+  <url><loc>https://gezgintadilat.com.tr/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/tesisat</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/mekanik</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/yangin-gaz</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/tadilat</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/su-tesisati</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/pis-su-gider-hatti</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/yangin-tesisati</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/dogalgaz-tesisati</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/mekanik-tesisat-pompa-vana-isitma</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/banyo-wc-yenileme</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/boya-karo-tadilat</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://gezgintadilat.com.tr/demir-dograma-cit</loc><lastmod>2026-10-10</lastmod></url>
 </urlset>

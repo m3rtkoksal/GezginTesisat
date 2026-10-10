@@ -4,7 +4,7 @@ const { onRequest } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const fs = require("fs");
 const path = require("path");
-const { CATEGORIES, defaults, SEO, PAGES } = require("./shared");
+const { CATEGORIES, defaults, SEO, PAGES, DISTRICTS, HOME } = require("./shared");
 
 const SITE_URL = "https://gezgintadilat.com.tr";
 const ICONS = ["🔍", "🚿", "🔧", "🚰", "🔥", "💧", "🛠️", "🧰"];
@@ -26,25 +26,19 @@ function intlPhone(p) {
 const areaList = (c) => String(c.areas || "").split(",").map((a) => a.trim()).filter(Boolean);
 const catOf = (g) => (CATEGORIES.includes(g.cat) ? g.cat : CATEGORIES[0]);
 
+const telHref = (p) => "tel:" + (intlPhone(p) || digits(p));
+const is24 = (h) => /24\s*saat|7\s*\/\s*24/i.test(String(h || ""));
+
 function buildHead(c) {
   const services = c.services.map((s) => s.title).filter(Boolean);
-  const areas = areaList(c);
-  // Başlık: işletme adı + en önemli aranan işler. Marka aramaları için "Tadilat" ve "Tamirat" adın hemen yanında.
-  const title = clip(`${c.businessName} | ${SEO.city} Tadilat, Tamirat, Yangın Tesisatı`, 72);
-  // Şehir ve ilçeler cümlenin başında: kırpılsa bile yerel bilgi kaybolmaz.
-  const place = areas.length ? `${SEO.city} (${areas.slice(0, 3).join(", ")})` : SEO.city;
-  const description = clip(
-    `${c.businessName} (${SEO.altNames.slice(0, 2).join(", ")}): ${place} yangın, doğalgaz, pompa, vana, ısıtma, gider, demir, çit, tamirat, tadilat.` +
-      (c.phone ? ` Ara: ${c.phone}` : ""),
-    158,
-  );
-  const keywords = SEO.keywords;
+  const title = clip(`${HOME.title} | ${c.businessName}`, 72);
+  const description = clip(HOME.desc, 158);
   const image = (c.gallery[0] && (c.gallery[0].url || c.gallery[0].thumb)) || "";
 
   const ld = {
     "@context": "https://schema.org",
-    // (knowsAbout aşağıda)
-    "@type": "Plumber",
+    "@type": ["Plumber", "HomeAndConstructionBusiness"],
+    "@id": SITE_URL + "/#isletme",
     name: c.businessName,
     alternateName: SEO.altNames,
     knowsAbout: SEO.topics,
@@ -54,10 +48,22 @@ function buildHead(c) {
   const tel = intlPhone(c.phone);
   if (tel) ld.telephone = tel;
   if (image) ld.image = image;
-  // Şehir her zaman bilinir (İstanbul). İlçeler panelden girilince eklenir.
-  ld.areaServed = [{ "@type": "City", name: SEO.city }, ...areas.map((a) => ({ "@type": "AdministrativeArea", name: a }))];
-  ld.address = { "@type": "PostalAddress", addressLocality: SEO.city, addressCountry: "TR", ...(c.address ? { streetAddress: c.address } : {}) };
-  if (c.hours) ld.openingHours = c.hours;
+  // Hizmet bölgesi İstanbul'un tamamı: şehir + 39 ilçe.
+  ld.areaServed = [
+    { "@type": "City", name: SEO.city },
+    ...[...DISTRICTS.avrupa, ...DISTRICTS.anadolu].map((d) => ({ "@type": "AdministrativeArea", name: `${d}, ${SEO.city}` })),
+  ];
+  // Ustanın adresi Çayırova/Kocaeli. Panelde açık adres girilirse sokak olarak eklenir.
+  ld.address = { "@type": "PostalAddress", ...(c.address ? { streetAddress: c.address } : {}), ...HOME.address };
+  if (is24(c.hours)) {
+    ld.openingHoursSpecification = [{
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "00:00",
+      closes: "23:59",
+    }];
+  }
+  if (HOME.founder) ld.founder = { "@type": "Person", name: HOME.founder };
   if (services.length) {
     ld.hasOfferCatalog = {
       "@type": "OfferCatalog",
@@ -74,7 +80,6 @@ function buildHead(c) {
   return [
     `<title>${esc(title)}</title>`,
     `<meta name="description" content="${esc(description)}">`,
-    `<meta name="keywords" content="${esc(keywords)}">`,
     `<link rel="canonical" href="${SITE_URL}/">`,
     `<meta property="og:type" content="website">`,
     `<meta property="og:locale" content="tr_TR">`,
@@ -118,8 +123,13 @@ function render(template, content, now = new Date()) {
     tagline: esc(c.tagline),
     about: esc(c.about),
     phone: esc(c.phone),
-    tel: esc("tel:" + digits(c.phone)),
+    tel: esc(telHref(c.phone)),
     wa: esc(wa),
+    h1: esc(HOME.h1),
+    intro: esc(HOME.intro),
+    districtsAvrupa: esc(DISTRICTS.avrupa.join(", ")),
+    districtsAnadolu: esc(DISTRICTS.anadolu.join(", ")),
+    serviceLinks: Object.keys(PAGES).map((k) => `<a href="${PAGES[k].path}" class="btn ghost">${esc(PAGES[k].nav)}</a>`).join(""),
     hours: esc(c.hours),
     address: esc(c.address),
     hoursHidden: c.hours ? "" : " hidden",
@@ -155,7 +165,7 @@ function renderPage(template, key, content, now = new Date()) {
       serviceType: pg.nav,
       description: pg.desc,
       areaServed: [{ "@type": "City", name: SEO.city }, { "@type": "AdministrativeArea", name: "Avrupa Yakası" }, { "@type": "AdministrativeArea", name: "Anadolu Yakası" }],
-      provider: { "@type": "Plumber", name: c.businessName, alternateName: SEO.altNames, url: SITE_URL + "/", ...(tel ? { telephone: tel } : {}) },
+      provider: { "@type": "Plumber", "@id": SITE_URL + "/#isletme", name: c.businessName, alternateName: SEO.altNames, url: SITE_URL + "/", ...(tel ? { telephone: tel } : {}) },
       url,
     },
     {
@@ -167,10 +177,17 @@ function renderPage(template, key, content, now = new Date()) {
       ],
     },
   ];
+  if (pg.faq && pg.faq.length) {
+    ld.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: pg.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+    });
+  }
   const head = [
     `<title>${esc(title)}</title>`,
-    `<meta name="description" content="${esc(clip(pg.desc + (c.phone ? ` Ara: ${c.phone}` : ""), 158))}">`,
-    `<meta name="keywords" content="${esc(pg.keywords)}">`,
+    `<meta name="description" content="${esc(clip(pg.metaDesc || pg.desc + (c.phone ? ` Ara: ${c.phone}` : ""), 158))}">`,
+    ...(pg.keywords ? [`<meta name="keywords" content="${esc(pg.keywords)}">`] : []),
     `<link rel="canonical" href="${url}">`,
     `<meta property="og:type" content="website">`,
     `<meta property="og:locale" content="tr_TR">`,
@@ -189,10 +206,15 @@ function renderPage(template, key, content, now = new Date()) {
     crumb: esc(pg.nav),
     name: esc(c.businessName),
     phone: esc(c.phone),
-    tel: esc("tel:" + digits(c.phone)),
+    tel: esc(telHref(c.phone)),
     wa: esc(wa),
     year: String(year),
-    navLinks: Object.keys(PAGES).map((k) => link(k)).join(""),
+    body: (pg.body || []).map((p) => `<p>${esc(p)}</p>`).join(""),
+    bodyHidden: pg.body && pg.body.length ? "" : " hidden",
+    itemsHidden: pg.items && pg.items.length ? "" : " hidden",
+    faq: (pg.faq || []).map(([q, a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join(""),
+    faqHidden: pg.faq && pg.faq.length ? "" : " hidden",
+    navLinks: Object.keys(PAGES).filter((k) => !PAGES[k].body).map((k) => link(k)).join(""),
     items: pg.items.map(([t, d]) => `<article><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join(""),
     others: Object.keys(PAGES).filter((k) => k !== key).map((k) => link(k, ' class="btn ghost"')).join(""),
   };

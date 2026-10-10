@@ -42,7 +42,11 @@
       </div>
     </section>
 
-    <section class="sec">
+    <section class="sec"{{bodyHidden}}>
+      <div class="wrap seo-text">{{body}}</div>
+    </section>
+
+    <section class="sec"{{itemsHidden}}>
       <div class="wrap">
         <p class="eyebrow">Yaptığımız işler</p>
         <h2>{{crumb}} hizmetleri</h2>
@@ -51,7 +55,15 @@
       </div>
     </section>
 
-    <section class="sec alt">
+    <section class="sec alt"{{faqHidden}}>
+      <div class="wrap seo-text">
+        <h2>Sık sorulan sorular</h2>
+        {{faq}}
+        <p><a class="btn primary" href="/#teklif">Teklif Al</a> <a class="btn wa" href="{{wa}}" target="_blank" rel="noopener">WhatsApp</a></p>
+      </div>
+    </section>
+
+    <section class="sec">
       <div class="wrap">
         <p class="eyebrow">Diğer hizmetler</p>
         <div class="lp-more">{{others}}</div>
