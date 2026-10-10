@@ -8,6 +8,7 @@
       "firestore.indexes.json",
       "**/.*",
       "functions/**",
+      "scripts/**",
       "*.template.html"
     ],
     "rewrites": [
