@@ -1,0 +1,40 @@
+# Gezgin Tesisat & Tadilat
+
+> Gezgin Tesisat & Tadilat (Gezgin Tadilat), Usta Ümit Kurt’un yürüttüğü tesisat ve tadilat işletmesidir. Çayırova (Kocaeli) merkezlidir, ofisi yoktur; İstanbul’un Avrupa ve Anadolu yakasındaki tüm ilçelerde konut, iş yeri ve sanayi tesislerinde yerinde hizmet verir.
+
+- Telefon ve WhatsApp: 0538 604 91 40 (+905386049140), https://wa.me/905386049140
+- Çalışma saati: 24 saat
+- Çalışma şekli: Telefon ya da WhatsApp’tan işi anlat, fotoğraf gönder; yerinde keşif yapılır ve fiyat işe başlamadan net olarak söylenir; iş bitince alan toplanarak teslim edilir.
+- Teklif formu: https://gezgintadilat.com.tr/#teklif (talep Ustaya üzerinden iletilir)
+
+Hizmetler: su tesisatı, pis su ve gider hatları, yangın tesisatı, doğalgaz tesisatı, mekanik tesisat (pompa, vana, ısıtma), banyo ve WC yenileme, boya, karo ve genel tadilat, demir doğrama ve çit.
+
+## Hizmet sayfaları
+
+- [Su Tesisatı](https://gezgintadilat.com.tr/su-tesisati): İstanbul'un iki yakasında su tesisatı kurulumu, yenileme ve arıza onarımı. Yerinde keşif, işe başlamadan net fiyat. 0538 604 91 40
+- [Pis Su & Gider](https://gezgintadilat.com.tr/pis-su-gider-hatti): İstanbul'da pis su ve gider hattı yenileme: kazı, boru döşeme ve hat yenileme. Konut, iş yeri ve sanayi. Keşif ve net fiyat: 0538 604 91 40
+- [Yangın Tesisatı](https://gezgintadilat.com.tr/yangin-tesisati): İstanbul'da iş yeri ve sanayi tesisleri için yangın tesisatı kurulumu ve bakımı. Planlama, uygulama, bakım. Keşif: 0538 604 91 40
+- [Doğalgaz Tesisatı](https://gezgintadilat.com.tr/dogalgaz-tesisati): İstanbul'da doğalgaz hattı ve gaz tesisatı işleri: mutfak ve iş yeri gaz hatları, bağlantı ve montaj. Keşif ve net fiyat: 0538 604 91 40
+- [Pompa, Vana & Isıtma](https://gezgintadilat.com.tr/mekanik-tesisat-pompa-vana-isitma): İstanbul'da mekanik tesisat: pompa grubu kurulum ve bakımı, vana değişimi, ısıtma kolektörü ve ısıtma hatları. Keşif: 0538 604 91 40
+- [Banyo & WC Yenileme](https://gezgintadilat.com.tr/banyo-wc-yenileme): İstanbul'da banyo ve WC yenileme: ıslak hacim tesisatı, karo ve montaj işleri tek ustadan. Yerinde keşif, net fiyat: 0538 604 91 40
+- [Boya & Karo](https://gezgintadilat.com.tr/boya-karo-tadilat): İstanbul'da boya, karo ve genel tadilat-tamirat işleri. Tesisat ve tadilat tek elden. Yerinde keşif, işe başlamadan net fiyat: 0538 604 91 40
+- [Demir Doğrama & Çit](https://gezgintadilat.com.tr/demir-dograma-cit): İstanbul'da demir kapı, korkuluk, demir çit ve tel çit işleri: ölçü, imalat ve montaj. Yerinde keşif, net fiyat: 0538 604 91 40
+
+## Genel hizmet sayfaları
+
+- [Tesisat](https://gezgintadilat.com.tr/tesisat): İstanbul su tesisatı, pis su ve gider hattı, banyo ve WC yenileme işleri. Kurulum, yenileme ve arıza onarımı.
+- [Mekanik](https://gezgintadilat.com.tr/mekanik): İstanbul mekanik tesisat, ısıtma kolektörü ve hattı, pompa grubu, vana değişimi ve bakımı.
+- [Yangın & Gaz](https://gezgintadilat.com.tr/yangin-gaz): İstanbul yangın tesisatı kurulumu ve bakımı, doğalgaz hattı ve gaz tesisatı işleri.
+- [Tadilat](https://gezgintadilat.com.tr/tadilat): İstanbul tadilat ve tamirat: boya, karo, mala, genel tadilat, demir doğrama, demir çit ve tel çit işleri.
+
+## Hizmet bölgesi
+
+İstanbul’un tamamı.
+
+- Avrupa yakası: Arnavutköy, Avcılar, Bağcılar, Bahçelievler, Bakırköy, Başakşehir, Bayrampaşa, Beşiktaş, Beylikdüzü, Beyoğlu, Büyükçekmece, Çatalca, Esenler, Esenyurt, Eyüpsultan, Fatih, Gaziosmanpaşa, Güngören, Kağıthane, Küçükçekmece, Sarıyer, Silivri, Sultangazi, Şişli, Zeytinburnu
+- Anadolu yakası: Adalar, Ataşehir, Beykoz, Çekmeköy, Kadıköy, Kartal, Maltepe, Pendik, Sancaktepe, Sultanbeyli, Şile, Tuzla, Ümraniye, Üsküdar
+
+## Optional
+
+- [Ana sayfa](https://gezgintadilat.com.tr/): Hizmetler, çalışma şekli, çalışmalardan fotoğraflar ve iletişim
+- [Site haritası](https://gezgintadilat.com.tr/sitemap.xml)
