@@ -13,9 +13,9 @@ const ld = (html) => JSON.parse(/<script type="application\/ld\+json">(.*?)<\/sc
 
 test("ham HTML'de içerik var (JavaScript gerekmeden)", () => {
   const h = page();
-  assert.match(h, /<h1 id="heroTitle">Gezgin Tesisat &amp; Tadilat<\/h1>/);
+  assert.match(h, /<h1 id="heroTitle">İstanbul&#39;da Tesisat ve Tadilat: Avrupa ve Anadolu Yakası<\/h1>/);
   for (const s of defaults.services) assert.ok(h.includes(`<h3>${s.title.replace(/&/g, "&amp;")}</h3>`), s.title);
-  assert.ok(h.includes('href="tel:05386049140"'));
+  assert.ok(h.includes('href="tel:+905386049140"'));
   assert.ok(h.includes('href="https://wa.me/905386049140"'));
   assert.match(h, /<p id="aboutText" class="muted">Gezgin Tesisat &amp; Tadilat;/);
   assert.ok(h.includes("Yangın tesisatı"), "görünür metinde anahtar kelime");
@@ -33,45 +33,47 @@ test("boş alanlar gizlenir: bölge, saat, adres, galeri", () => {
   assert.match(h, /<section id="gallery" class="sec alt" hidden>/);
 });
 
-test("başlık, açıklama, canonical ve Open Graph marka aramalarını içerir", () => {
+test("başlık, açıklama, canonical ve Open Graph", () => {
   const h = page();
-  const title = decode2(/<title>(.*?)<\/title>/.exec(h)[1]);
-  assert.ok(title.length <= 80, `başlık uzun: ${title.length}`);
-  assert.match(title, /Gezgin Tesisat & Tadilat/);
-  assert.match(title, /İstanbul Tadilat, Tamirat, Yangın Tesisatı/);
   const decode = (x) => x.replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+  assert.equal(decode(/<title>(.*?)<\/title>/.exec(h)[1]), "İstanbul Tesisat ve Tadilat Ustası | Gezgin Tesisat & Tadilat");
   const desc = decode(/<meta name="description" content="(.*?)">/.exec(h)[1]);
-  assert.ok(desc.length <= 160, `açıklama uzun: ${desc.length}`);
-  assert.match(desc, /Gezgin Tadilat/);
-  assert.match(desc, /Gezgin Tamirat/);
-  for (const k of ["yangın", "doğalgaz", "pompa", "vana", "ısıtma", "gider", "tamirat", "tadilat", "İstanbul", "çit", "demir"]) assert.match(desc, new RegExp(k), k);
+  assert.ok(desc.length <= 155, `açıklama uzun: ${desc.length}`);
+  for (const k of ["İstanbul", "yangın", "doğalgaz", "banyo", "demir çit", "0538 604 91 40"]) assert.ok(desc.includes(k), k);
+  assert.doesNotMatch(h, /name="keywords"/);
   assert.ok(h.includes('<link rel="canonical" href="https://gezgintadilat.com.tr/">'));
   assert.ok(h.includes('<meta property="og:url" content="https://gezgintadilat.com.tr/">'));
 });
 
-test("yapılandırılmış veri geçerli JSON ve doğru alanlar var", () => {
+test("yapılandırılmış veri: adres Çayırova/Kocaeli, bölge İstanbul + 39 ilçe, uydurma alan yok", () => {
   const d = ld(page());
-  assert.equal(d["@type"], "Plumber");
+  assert.deepEqual(d["@type"], ["Plumber", "HomeAndConstructionBusiness"]);
   assert.equal(d.name, "Gezgin Tesisat & Tadilat");
   assert.deepEqual(d.alternateName, SEO.altNames);
-  for (const n of ["Gezgin Tadilat", "Gezgin Tamirat"]) assert.ok(d.alternateName.includes(n));
   assert.equal(d.telephone, "+905386049140");
   assert.equal(d.url, "https://gezgintadilat.com.tr/");
   assert.equal(d.hasOfferCatalog.itemListElement.length, defaults.services.length);
   assert.equal(d.address.streetAddress, undefined, "sokak adresi yokken uydurulmaz");
-  assert.equal(d.address.addressLocality, "İstanbul");
-  assert.deepEqual(d.areaServed, [{ "@type": "City", name: "İstanbul" }], "ilçe yokken sadece şehir");
+  assert.equal(d.address.addressLocality, "Çayırova");
+  assert.equal(d.address.addressRegion, "Kocaeli");
+  assert.equal(d.areaServed[0].name, "İstanbul");
+  assert.equal(d.areaServed.length, 40);
+  assert.ok(d.areaServed.some((a) => a.name === "Kadıköy, İstanbul"));
+  assert.ok(d.areaServed.some((a) => a.name === "Beylikdüzü, İstanbul"));
+  assert.equal(d.openingHoursSpecification, undefined, "saat yokken eklenmez");
+  for (const k of ["aggregateRating", "review", "priceRange", "foundingDate"]) assert.equal(d[k], undefined, k);
 });
 
-test("bölge, adres ve saat girilince sayfaya ve veriye yansır", () => {
-  const h = page({ areas: "Kadıköy, Üsküdar", address: "Örnek Mah. 1", hours: "Her gün 09-18" });
-  assert.ok(h.includes('<span class="chip">Kadıköy</span>'));
-  assert.doesNotMatch(h, /id="areasWrap" hidden>/);
+test("bölge, adres ve 24 saat girilince sayfaya ve veriye yansır", () => {
+  const h = page({ areas: "İstanbul Avrupa ve Anadolu Yakası", address: "Örnek Mah. 1", hours: "24 saat" });
+  assert.ok(h.includes('<span class="chip">İstanbul Avrupa ve Anadolu Yakası</span>'));
   const d = ld(h);
-  assert.deepEqual(d.areaServed.map((a) => a.name), ["İstanbul", "Kadıköy", "Üsküdar"]);
   assert.equal(d.address.streetAddress, "Örnek Mah. 1");
-  assert.equal(d.openingHours, "Her gün 09-18");
-  assert.match(/<meta name="description" content="(.*?)">/.exec(h)[1], /Kadıköy/);
+  assert.equal(d.address.addressLocality, "Çayırova");
+  assert.equal(d.openingHoursSpecification[0].opens, "00:00");
+  assert.equal(d.openingHoursSpecification[0].closes, "23:59");
+  assert.equal(d.openingHoursSpecification[0].dayOfWeek.length, 7);
+  assert.ok(h.includes("Ümraniye"), "ilçe listesi görünür");
 });
 
 test("içerikteki HTML kaçışlanır, script kapanışı JSON'u bozmaz", () => {
@@ -136,23 +138,37 @@ test("hizmet sayfaları: her biri kendi başlığı, canonical, JSON-LD ve bölg
     const h = renderPage(tpl, k, {}, new Date("2026-10-09T12:00:00Z"));
     assert.doesNotMatch(h, /\{\{\w+\}\}/, k);
     assert.ok(h.includes(`<link rel="canonical" href="https://gezgintadilat.com.tr${PAGES[k].path}">`), k);
-    assert.match(h, /<h1>İstanbul /, k);
+    assert.match(h, /<h1>İstanbul/, k);
     assert.ok(h.includes("Avrupa ve Anadolu yakasının tamamında"), k);
-    assert.ok(h.includes('href="tel:05386049140"'), k);
+    assert.ok(h.includes('href="tel:+905386049140"'), k);
     for (const [t] of PAGES[k].items) assert.ok(h.includes(`<h3>${t}</h3>`), t);
     const blocks = [...h.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map((m) => JSON.parse(m[1]));
-    assert.equal(blocks.length, 2);
+    assert.equal(blocks.length, PAGES[k].faq ? 3 : 2);
     assert.equal(blocks[0]["@type"], "Service");
     assert.equal(blocks[1]["@type"], "BreadcrumbList");
+    if (PAGES[k].faq) {
+      assert.equal(blocks[2]["@type"], "FAQPage");
+      assert.equal(blocks[2].mainEntity.length, 3);
+      for (const p of PAGES[k].body) assert.ok(h.includes(p.replace(/'/g, "&#39;")), `${k} metin`);
+      assert.ok(h.includes('href="/#teklif"'), k);
+    }
   }
   assert.equal(renderPage(tpl, "yok", {}), null);
 });
 
-test("ana sayfa dört hizmet sayfasına bağlanır ve sitemap hepsini içerir", () => {
+test("ana sayfa tüm hizmet sayfalarına bağlanır; sitemap ve rewrite'lar hepsini içerir", () => {
+  const { PAGES } = require("./shared");
   const h = page();
-  for (const p of ["/tesisat", "/mekanik", "/yangin-gaz", "/tadilat"]) assert.ok(h.includes(`href="${p}"`), p);
   const sm = fs.readFileSync(path.join(__dirname, "..", "sitemap.xml"), "utf8");
-  for (const p of ["/tesisat", "/mekanik", "/yangin-gaz", "/tadilat"]) assert.ok(sm.includes(`https://gezgintadilat.com.tr${p}</loc>`), p);
+  const fb = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "firebase.json"), "utf8"));
+  const sources = fb.hosting.rewrites.map((r) => r.source);
+  for (const k of Object.keys(PAGES)) {
+    const p = PAGES[k].path;
+    assert.ok(h.includes(`href="${p}"`), p);
+    assert.ok(sm.includes(`https://gezgintadilat.com.tr${p}</loc>`), p);
+    assert.ok(sources.includes(p), `rewrite ${p}`);
+  }
+  assert.equal(Object.keys(PAGES).length, 12);
 });
 
 test("favicon dosyaları var ve her iki şablonda bağlı", () => {

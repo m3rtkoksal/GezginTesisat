@@ -40,6 +40,62 @@
         }
       },
       {
+        "source": "/su-tesisati",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/pis-su-gider-hatti",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/yangin-tesisati",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/dogalgaz-tesisati",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/mekanik-tesisat-pompa-vana-isitma",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/banyo-wc-yenileme",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/boya-karo-tadilat",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/demir-dograma-cit",
+        "function": {
+          "functionId": "site",
+          "region": "europe-west1"
+        }
+      },
+      {
         "source": "/",
         "function": {
           "functionId": "site",

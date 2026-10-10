@@ -7,15 +7,16 @@ const ICONS = ["🔍", "🚿", "🔧", "🚰", "🔥", "💧", "🛠️", "🧰"
 
 const c = await loadContent();
 
-document.title = `${c.businessName} | Tesisat & Tadilat`;
-for (const id of ["brand", "footBrand", "heroTitle"]) $(id).textContent = c.businessName;
+// Başlık ve H1 sunucuda SEO için üretilir, burada değiştirilmez.
+for (const id of ["brand", "footBrand"]) $(id).textContent = c.businessName;
 $("tagline").textContent = c.tagline;
 $("aboutText").textContent = c.about;
 const show = (id, v) => { $(id).textContent = v; $(id).closest("li").hidden = !v; };
 show("hours", c.hours); show("address", c.address);
 $("year").textContent = new Date().getFullYear();
 
-const tel = "tel:" + digits(c.phone);
+const d10 = digits(c.phone).replace(/^\+?90/, "").replace(/^0/, "");
+const tel = "tel:" + (/^\d{10}$/.test(d10) ? "+90" + d10 : digits(c.phone));
 for (const id of ["callTop", "callBtn", "callBtn2", "phoneLink", "callBar"]) $(id).href = tel;
 $("phoneLink").textContent = c.phone;
 $("phoneTop").textContent = c.phone;
